@@ -42,12 +42,11 @@ minkowski_sum (vector < vector < int > >A, vector < vector < int > >B)
 {
 
   vector < vector < int >>C;
-
-  for (int i = 0; i < A.size (); ++i)
+for (const auto a:A)
     {
-      for (int j = 0; j < B.size (); ++j)
+    for (const auto b:B)
 	{
-	  vector < int >R = { A[i][0] + B[j][0], A[i][1] + B[j][1] };
+	  vector < int >R = { a[0] + b[0], a[1] + b[1] };
 	  C.push_back (R);
 	}
     }
@@ -60,10 +59,8 @@ int
 main ()
 {
   // ***TODO: Define the coordinates of triangle A and B using 2D vectors*** //
-  vector < vector < int >>A;
-  A = { { 1, 0}, { 0, 1}, { 0, -1},};
-  vector < vector < int >>B;
-  B = { { 0, 0}, { 1, 1}, { 1, -1},}; 
+	 vector< vector < int >> A = { { 1, 0}, { 0, 1}, { 0, -1},};
+	 vector< vector < int >> B = { { 0, 0}, { 1, 1}, { 1, -1},};
   // Compute the minkowski sum of triangle A and B
   vector < vector < int >>C;
   C = minkowski_sum (A, B);
