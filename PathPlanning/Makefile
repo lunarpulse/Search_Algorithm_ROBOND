@@ -5,7 +5,7 @@ src_dir = src
 obj_dir = obj
 
 # The name of the executable file
-elf_name = MKSK 
+elf_name = PathPlanner 
 
 CC = g++
 CFLAGS = -O0 -g

@@ -157,13 +157,17 @@ Planner & Planner::operator = (const Planner & other)
 	string
 Planner::get_start ()
 {
-	return start[0] + " , " +start[1];
+	string startstring("");
+	startstring =to_string( start[0]) + " , " +to_string(start[1]);
+	return startstring;
 }		/* -----  end of method Planner::get_start  ----- */
 
 	string
 Planner::get_goal (  )
 {
-	return goal[0] + " , " + goal[1];
+	string goalstring("");
+        goalstring=to_string( this->goal[0]) + " , " +to_string( goal[1]);
+	return goalstring;
 }		/* -----  end of method Planner::get_goal  ----- */
 
 	int
