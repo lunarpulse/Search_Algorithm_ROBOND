@@ -127,11 +127,44 @@ inline vector < vector < int >>
  *      Method:  set_grid
  *------------------------------------------------------------------------------
  */
-     inline void Map::set_grid (vector < vector < int >>value)
+	inline
+void Map::set_grid (vector < vector < int >>value)
 {
   grid = value;
   return;
 }				/* -----  end of method Map::set_grid  ----- */
+
+/*
+ *------------------------------------------------------------------------------
+ *       Class:  Map
+ *      Method:  get_heuristic
+ *------------------------------------------------------------------------------
+ */
+inline vector<vector<int>>
+Map::get_heuristic (  ) const
+{
+	return heuristic;
+}		/* -----  end of method Map::get_heuristic  ----- */
+
+/*
+ *------------------------------------------------------------------------------
+ *       Class:  Map
+ *      Method:  set_heuristic
+ *------------------------------------------------------------------------------
+ */
+	inline void
+Map::set_heuristic ( vector<vector<int>> value )
+{
+	heuristic	= value;
+	return ;
+}		/* -----  end of method Map::set_heuristic  ----- */
+
+	void
+Map::Set_Heuristic ( vector<vector<int>> heuristicIn )
+{
+	heuristic.assign (heuristicIn.begin (), heuristicIn.end ());
+	return ;
+}		/* -----  end of method Map::Set_Heuristic  ----- */
 
 /*
  *------------------------------------------------------------------------------
@@ -334,6 +367,20 @@ inline vector < vector < int >>
   return;
 }				/* -----  end of method Planner::set_movements  ----- */
 
+void
+Planner::set_heuristic(Map* map){
+  vector<vector<int>> heuristic;
+  for(int i = 0; i < map->get_mapHeight(); i++)
+  {
+    vector<int> row_heuristic;
+    for(int j = 0; j < map->get_mapWidth(); j++)
+    {
+      row_heuristic.push_back( goal[0] - i + goal[1] - j );
+    }
+    heuristic.push_back(row_heuristic);
+  }
+  map->Set_Heuristic(heuristic); 
+}
 string
 Planner::get_string_start ()
 {
@@ -418,9 +465,10 @@ BFS_shortestPath(Map * map, Planner * planner)
   int x = planner->get_start ()[0];
   int y = planner->get_start ()[1];
   int g = 0;
+  int f = 0;
 
   vector < vector < int >>open;
-  open.push_back ( { g, x, y});
+  open.push_back ( {f, g, x, y});
 
   const int *planGoal;
   planGoal = planner->get_goal ();
@@ -445,21 +493,23 @@ BFS_shortestPath(Map * map, Planner * planner)
 	  next = open.back ();	// the last one to the next vector
 	  open.pop_back ();	// remove the poped one to the next
 
-	  expanded[next[1]][next[2]] = seq++;
+	  expanded[next[2]][next[3]] = seq++;
 
-	  if (next[1] == planGoal[0] && next[2] == planGoal[1])
+	  if (next[2] == planGoal[0] && next[3] == planGoal[1])
 	    {
 	     foundGoal= true;
-	     cout << "[" << next[0] << ", " << next[1] << ", " << next[2] <<
+	     cout <<  "[" << next[0] << ", " << next[1] << ", " << next[2] << ", " << next[3] <<
 		"]" << endl;
 	    }
 	  else
 	    {
 	      for (int i = 0; i < movment_size; ++i)
 		{
-		  x = next[1];
-		  y = next[2];
-		  g = next[0];
+		  x = next[2];
+		  y = next[3];
+		  g = next[1];
+//		  f = next[0];
+
 		  x2 = x + planner->get_movements ()[i][0];
 		  y2 = y + planner->get_movements ()[i][1];
 		  if (x2 >= 0 && x2 < mapGridXsize && y2 >= 0
@@ -468,9 +518,12 @@ BFS_shortestPath(Map * map, Planner * planner)
 		      if (explored[x2][y2] ==
 			  0 and map->get_grid ()[x2][y2] == 0)
 			{
+				int costToAdd = planner->get_cost ();
+				int newG = g + costToAdd;
+				int newF = newG + map->get_heuristic()[x2][y2];
 			  open.push_back (
 					   {
-					   g + planner->get_cost (), x2, y2}
+					   newF, newG, x2, y2}
 			  );
 			  explored[x2][y2] = 1;
 			  action[x2][y2] = i; 
@@ -553,7 +606,7 @@ BFS_search_expand (Map * map, Planner * planner)
 	  open.pop_back ();	// remove the poped one to the next
 
 
-		  expanded[next[1]][next[2]] = seq++;
+	  expanded[next[1]][next[2]] = seq++;
 
 	  if (next[1] == planGoal[0] && next[2] == planGoal[1])
 	    {
@@ -722,6 +775,8 @@ main ()
   0, 1}};
   Planner *planner =
     new Planner (start, goal, cost, movements_arrows, movements);
+  planner->set_heuristic(map);
+  print2DVectorUnsorted (map->get_heuristic());
 
   // Print classes variables
   cout << "Map:" << endl;
