@@ -28,8 +28,12 @@ public:
   inline void set_grid (vector < vector < int >>value);
   inline vector<vector<int>> get_heuristic (  ) const;
   inline void set_heuristic ( vector<vector<int>> value );
+  inline vector<vector<double>> get_map (  ) const;
+  inline void set_map ( vector<vector<double>> value );
   /* ====================  MUTATORS      ====================== */
 
+  vector<vector<int> > MaptoGrid();
+  vector<vector<double> > GetMap(string mapFile);
   void Set_Heuristic ( vector<vector<int>> heuristicIn );
   /* ====================  OPERATORS     ====================== */
 
@@ -45,6 +49,7 @@ private:
 
   /* ====================  DATA MEMBERS  ====================== */
   int mapWidth, mapHeight;
+  vector<vector<double>> map;
   vector < vector < int >> grid;
   vector < vector < int >> heuristic;
 };				/* -----  end of class Map  ----- */
@@ -75,6 +80,8 @@ public:
   inline void set_movements_arrows (string value[] );
   inline vector < vector < int >>get_movements () const;
   inline void set_movements (vector < vector < int >>value);
+  inline vector<vector<int>> get_path (  ) const;
+  inline void set_path ( vector<vector<int>> value );
   /* ====================  MUTATORS      ====================== */
   void set_heuristic(Map* map);
   string get_string_start ();
@@ -97,6 +104,7 @@ private:
   /* ====================  DATA MEMBERS  ====================== */
   int start[2], goal[2], cost;
   string movements_arrows[4];
-    vector < vector < int >>movements;
+    vector < vector < int >> movements;
+    vector < vector < int >> path;
 
 };				/* -----  end of class Planner  ----- */

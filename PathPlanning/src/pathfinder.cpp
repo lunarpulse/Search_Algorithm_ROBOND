@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <set>
 #include "pathfinder.hpp"
+#include <fstream>
 
 using namespace std;
 
@@ -159,12 +160,71 @@ Map::set_heuristic ( vector<vector<int>> value )
 	return ;
 }		/* -----  end of method Map::set_heuristic  ----- */
 
+/*
+ *------------------------------------------------------------------------------
+ *       Class:  Map
+ *      Method:  get_map
+ *------------------------------------------------------------------------------
+ */
+inline vector<vector<double>>
+Map::get_map (  ) const
+{
+	return map;
+}		/* -----  end of method Map::get_map  ----- */
+
+/*
+ *------------------------------------------------------------------------------
+ *       Class:  Map
+ *      Method:  set_map
+ *------------------------------------------------------------------------------
+ */
+	inline void
+Map::set_map ( vector<vector<double>> value )
+{
+	map	= value;
+	return ;
+}		/* -----  end of method Map::set_map  ----- */
+
 	void
 Map::Set_Heuristic ( vector<vector<int>> heuristicIn )
 {
 	heuristic.assign (heuristicIn.begin (), heuristicIn.end ());
 	return ;
 }		/* -----  end of method Map::Set_Heuristic  ----- */
+
+vector<vector<double> > Map::GetMap(string mapFile)
+{
+	vector<vector<double> > mymap(mapHeight, vector<double>(mapWidth));
+	ifstream myReadFile;
+	myReadFile.open(mapFile);
+
+	while (!myReadFile.eof()) {
+		for (int i = 0; i < mapHeight; i++) {
+			for (int j = 0; j < mapWidth; j++) {
+				myReadFile >> mymap[i][j];
+			}
+		}
+	}
+	return mymap;
+}
+vector<vector<int> > Map::MaptoGrid()
+{
+	vector<vector<int> > grid(mapHeight, vector<int>(mapWidth));
+	for (int x = 0; x < mapHeight; x++) {
+		for (int y = 0; y < mapWidth; y++) {
+			if (map[x][y] == 0) //unkown state
+				grid[x][y] = 1;
+
+			else if (map[x][y] > 0) //Occupied state
+				grid[x][y] = 1;
+
+			else //Free state
+				grid[x][y] = 0;
+		}
+	}
+
+	return grid;
+}
 
 /*
  *------------------------------------------------------------------------------
@@ -367,6 +427,31 @@ inline vector < vector < int >>
   return;
 }				/* -----  end of method Planner::set_movements  ----- */
 
+/*
+ *------------------------------------------------------------------------------
+ *       Class:  Planner
+ *      Method:  get_path
+ *------------------------------------------------------------------------------
+ */
+inline vector<vector<int>>
+Planner::get_path (  ) const
+{
+	return path;
+}		/* -----  end of method Planner::get_path  ----- */
+
+/*
+ *------------------------------------------------------------------------------
+ *       Class:  Planner
+ *      Method:  set_path
+ *------------------------------------------------------------------------------
+ */
+	inline void
+Planner::set_path ( vector<vector<int>> value )
+{
+	path	= value;
+	return ;
+}		/* -----  end of method Planner::set_path  ----- */
+
 void
 Planner::set_heuristic(Map* map){
   vector<vector<int>> heuristic;
@@ -465,7 +550,7 @@ BFS_shortestPath(Map * map, Planner * planner)
   int x = planner->get_start ()[0];
   int y = planner->get_start ()[1];
   int g = 0;
-  int f = 0;
+  int f = g + map->get_heuristic()[x][y];
 
   vector < vector < int >>open;
   open.push_back ( {f, g, x, y});
@@ -518,8 +603,7 @@ BFS_shortestPath(Map * map, Planner * planner)
 		      if (explored[x2][y2] ==
 			  0 and map->get_grid ()[x2][y2] == 0)
 			{
-				int costToAdd = planner->get_cost ();
-				int newG = g + costToAdd;
+				int newG = g + planner->get_cost ();
 				int newF = newG + map->get_heuristic()[x2][y2];
 			  open.push_back (
 					   {
@@ -548,6 +632,7 @@ BFS_shortestPath(Map * map, Planner * planner)
 	  x2 = pX - planner->get_movements ()[action[pX][pY]][0];
 	  y2 = pY - planner->get_movements ()[action[pX][pY]][1];
 	  arrows[x2][y2] = planner->get_movements_arrows()[action[pX][pY]] ;
+	  planner->get_path().push_back({x2,y2});
 	  pX = x2;
 	  pY = y2;
   }
@@ -735,7 +820,7 @@ int
 main ()
 {
   // Instantiate map and planner objects
-  const int width = 6, height = 5;
+  const int width = 150, height = 300;
   vector < vector < int >>grid = {
     {
      0, 1, 0, 0, 0, 0},
@@ -750,12 +835,14 @@ main ()
   };
 
   Map *map = new Map (width, height, grid);
+  map->set_map( map->GetMap("./resource/map.txt"));
+  map->set_grid( map->MaptoGrid());
 
   int start[2] = {
-    0, 0
+    230, 145 
   };
   int goal[2] = {
-    height - 1, width - 1
+    60, 50 
   };
   int cost = 1;
 
