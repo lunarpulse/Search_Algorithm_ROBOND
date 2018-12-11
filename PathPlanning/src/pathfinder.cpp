@@ -4,9 +4,10 @@
 #include <set>
 #include "pathfinder.hpp"
 #include <fstream>
+#include "matplotlibcpp.h" //Graph Library
 
 using namespace std;
-
+namespace plt = matplotlibcpp;
 
 /*
  *------------------------------------------------------------------------------
@@ -452,6 +453,13 @@ Planner::set_path ( vector<vector<int>> value )
 	return ;
 }		/* -----  end of method Planner::set_path  ----- */
 
+	void
+Planner::Path_push_back ( vector<int> input )
+{
+	path.push_back(input);
+	return ;
+}		/* -----  end of method Planner::Path_push_back  ----- */
+
 void
 Planner::set_heuristic(Map* map){
   vector<vector<int>> heuristic;
@@ -632,7 +640,7 @@ BFS_shortestPath(Map * map, Planner * planner)
 	  x2 = pX - planner->get_movements ()[action[pX][pY]][0];
 	  y2 = pY - planner->get_movements ()[action[pX][pY]][1];
 	  arrows[x2][y2] = planner->get_movements_arrows()[action[pX][pY]] ;
-	  planner->get_path().push_back({x2,y2});
+	  planner->Path_push_back({x2,y2});
 	  pX = x2;
 	  pY = y2;
   }
@@ -816,6 +824,44 @@ BFS_search (Map * map, Planner * planner)
   return;
 }				/* -----  end of function search  ----- */
 
+void visualization(Map* map, Planner* planner)
+{
+
+	plt::title("Path");
+	plt::xlim(0, map->get_mapHeight());
+	plt::ylim(0, map->get_mapWidth());
+        int map_height = map->get_mapHeight();
+	int map_width = map->get_mapWidth();
+
+	for (double x = 0; x < map_height; x++) {
+		cout << "Remaining Rows= " << map_height - x << endl;
+		for (double y = 0; y < map_width; y++) {
+			if (map->get_map()[x][y] == 0) { 
+				plt::plot({ x }, { y }, "g.");
+			}
+			else if (map->get_map()[x][y] > 0) { 
+				plt::plot({ x }, { y }, "k.");
+			}
+			else { 
+				plt::plot({ x }, { y }, "r.");
+			}
+		}
+	}
+
+
+	plt::plot({ (double)planner->get_start()[0] }, { (double)planner->get_start()[1] }, "bo");
+	plt::plot({ (double)planner->get_goal()[0] }, { (double)planner->get_goal()[1] }, "b*");
+
+	int path_size = planner->get_path().size();
+	for (int i = 0; i < path_size; i++) {
+		plt::plot({ (double)planner->get_path()[i][0] }, { (double)planner->get_path()[i][1] }, "b.");
+	}
+
+
+	plt::save("./Images/Path.png");
+	plt::clf();
+}
+
 int
 main ()
 {
@@ -878,5 +924,6 @@ main ()
 
 //  BFS_search (map, planner);
   BFS_shortestPath(map, planner);
+  visualization(map, planner);
   return 0;
 }

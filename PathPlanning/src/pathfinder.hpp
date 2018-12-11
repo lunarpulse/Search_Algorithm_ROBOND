@@ -83,6 +83,7 @@ public:
   inline vector<vector<int>> get_path (  ) const;
   inline void set_path ( vector<vector<int>> value );
   /* ====================  MUTATORS      ====================== */
+  void Path_push_back ( vector<int> input );
   void set_heuristic(Map* map);
   string get_string_start ();
   string get_string_goal ();
