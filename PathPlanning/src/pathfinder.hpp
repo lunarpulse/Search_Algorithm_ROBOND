@@ -4,10 +4,6 @@
 
 using namespace std;
 
-/* TODO: Define a Map class
-   Inside the map class, define the mapWidth, mapHeight and grid as a 2D vector
-*/
-
 /*
  * =============================================================================
  *        Class:  Map
@@ -16,39 +12,39 @@ using namespace std;
  */
 class Map
 {
-	public:
-		/* ====================  LIFECYCLE     ================================== */
-		Map (int width, int height, vector<vector<int>> gridIn);                             /* constructor      */
-		Map ( const Map &other );   /* copy constructor */
-		~Map ();                            /* destructor       */
+public:
+  /* ====================  LIFECYCLE     ================================== */
+  Map (int width, int height, vector < vector < int >>gridIn);	/* constructor      */
+    Map (const Map & other);	/* copy constructor */
+   ~Map ();			/* destructor       */
 
-		/* ====================  ACCESSORS     ====================== */
+  /* ====================  ACCESSORS     ====================== */
 
-		/* ====================  MUTATORS      ====================== */
+  inline int get_mapHeight () const;
+  inline void set_mapHeight (int value);
+  inline int get_mapWidth () const;
+  inline void set_mapWidth (int value);
+  inline vector<vector<int>> get_grid (  ) const;
+  inline void set_grid (vector < vector < int >>value);
+  /* ====================  MUTATORS      ====================== */
 
-		vector<vector<int> > get_grid();
-		/* ====================  OPERATORS     ====================== */
+  /* ====================  OPERATORS     ====================== */
 
-		Map& operator = (const Map &other ); /*assignment operator*/
+    Map & operator = (const Map & other);	/*assignment operator */
 
-	protected:
-		/* ====================  METHODS       ====================== */
+protected:
+  /* ====================  METHODS       ====================== */
 
-		/* ====================  DATA MEMBERS  ====================== */
+  /* ====================  DATA MEMBERS  ====================== */
 
-	private:
-		/* ====================  METHODS       ====================== */
+private:
+  /* ====================  METHODS       ====================== */
 
-		/* ====================  DATA MEMBERS  ====================== */
-		int mapWidth, mapHeight;
-		vector<vector<int> > grid;
+  /* ====================  DATA MEMBERS  ====================== */
+  int mapWidth, mapHeight;
+    vector < vector < int >>grid;
 
-}; /* -----  end of class Map  ----- */
-
-/* TODO: Define a Planner class
-   Inside the Planner class, define the start, goal, cost, movements, and movements_arrows
-   Note: The goal should be defined it terms of the mapWidth and mapHeight
-*/
+};				/* -----  end of class Map  ----- */
 
 /*
  * =============================================================================
@@ -58,53 +54,45 @@ class Map
  */
 class Planner
 {
-	public:
-		/* ====================  LIFECYCLE     ================================== */
-		Planner (int startIn[], int goalIn[], int costIn, string movements_arrowsIn[] , vector<vector<int>> movementsIn );                             /* constructor      */
-		Planner ( const Planner &other );   /* copy constructor */
-		~Planner ();                            /* destructor       */
+public:
+  /* ====================  LIFECYCLE     ================================== */
+  Planner (int startIn[], int goalIn[], int costIn, string movements_arrowsIn[], vector < vector < int >>movementsIn);	/* constructor      */
+    Planner (const Planner & other);	/* copy constructor */
+   ~Planner ();			/* destructor       */
 
-		/* ====================  ACCESSORS     ====================== */
-		
-		/* ====================  MUTATORS      ====================== */
+  /* ====================  ACCESSORS     ====================== */
 
-		string get_start();
-		string get_goal();
-		int get_cost();
-		vector<vector<int> > get_movements();
-		string get_movements_arrows();
-		/* ====================  OPERATORS     ====================== */
+  inline const int *get_start () const;
+  inline void set_start (int value[2] );
+  inline const int* get_goal () const;
+  inline void set_goal (int value[2]);
+  inline int get_cost () const;
+  inline void set_cost (int value);
+  inline const string *get_movements_arrows () const;
+  inline void set_movements_arrows (string value[] );
+  inline vector < vector < int >>get_movements () const;
+  inline void set_movements (vector < vector < int >>value);
+  /* ====================  MUTATORS      ====================== */
+  string get_string_start ();
+  string get_string_goal ();
+  string get_movements_string_arrows ();
+  string get_string_movements_arrows ();
+  vector < vector < int >> get_string_movements ();
+  /* ====================  OPERATORS     ====================== */
 
-		Planner& operator = (const Planner &other ); /*assignment operator*/
+    Planner & operator = (const Planner & other);	/*assignment operator */
 
-	protected:
-		/* ====================  METHODS       ====================== */
+protected:
+  /* ====================  METHODS       ====================== */
 
-		/* ====================  DATA MEMBERS  ====================== */
+  /* ====================  DATA MEMBERS  ====================== */
 
-	private:
-		/* ====================  METHODS       ====================== */
+private:
+  /* ====================  METHODS       ====================== */
 
-		/* ====================  DATA MEMBERS  ====================== */
-		int start[2], goal[2], cost;
-		string movements_arrows[4];
-                vector<vector<int> > movements;
+  /* ====================  DATA MEMBERS  ====================== */
+  int start[2], goal[2], cost;
+  string movements_arrows[4];
+    vector < vector < int >>movements;
 
-}; /* -----  end of class Planner  ----- */
-
-/* TODO: Define a print2DVector function which will print 2D vectors of any data type
-   Example
-   
-   Input: 
-   vector<vector<int> > a{{ 1, 0 },{ 0, 1 }};
-   print2DVector(a);
-   vector<vector<string> > b{{ "a", "b" },{ "c", "d" }};
-   print2DVector(b);
-   
-   Output:
-   1 0
-   0 1
-   a b
-   c d
-   Hint: You need to use templates
-*/
+};				/* -----  end of class Planner  ----- */
