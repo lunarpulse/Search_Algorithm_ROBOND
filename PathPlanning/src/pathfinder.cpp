@@ -68,10 +68,10 @@ Map & Map::operator = (const Map & other)
  *------------------------------------------------------------------------------
  */
 inline int
-Map::get_mapHeight () const
-{
-  return mapHeight;
-}				/* -----  end of method Map::get_mapHeight  ----- */
+     Map::get_mapHeight () const
+     {
+       return mapHeight;
+     }				/* -----  end of method Map::get_mapHeight  ----- */
 
 /*
  *------------------------------------------------------------------------------
@@ -79,8 +79,7 @@ Map::get_mapHeight () const
  *      Method:  set_mapHeight
  *------------------------------------------------------------------------------
  */
-inline void
-Map::set_mapHeight (int value)
+     inline void Map::set_mapHeight (int value)
 {
   mapHeight = value;
   return;
@@ -93,10 +92,10 @@ Map::set_mapHeight (int value)
  *------------------------------------------------------------------------------
  */
 inline int
-Map::get_mapWidth () const
-{
-  return mapWidth;
-}				/* -----  end of method Map::get_mapWidth  ----- */
+     Map::get_mapWidth () const
+     {
+       return mapWidth;
+     }				/* -----  end of method Map::get_mapWidth  ----- */
 
 /*
  *------------------------------------------------------------------------------
@@ -104,8 +103,7 @@ Map::get_mapWidth () const
  *      Method:  set_mapWidth
  *------------------------------------------------------------------------------
  */
-inline void
-Map::set_mapWidth (int value)
+     inline void Map::set_mapWidth (int value)
 {
   mapWidth = value;
   return;
@@ -118,10 +116,10 @@ Map::set_mapWidth (int value)
  *------------------------------------------------------------------------------
  */
 inline vector < vector < int >>
-Map::get_grid () const
-{
-  return grid;
-}				/* -----  end of method Map::get_grid  ----- */
+     Map::get_grid () const
+     {
+       return grid;
+     }				/* -----  end of method Map::get_grid  ----- */
 
 /*
  *------------------------------------------------------------------------------
@@ -129,8 +127,7 @@ Map::get_grid () const
  *      Method:  set_grid
  *------------------------------------------------------------------------------
  */
-inline void
-Map::set_grid (vector < vector < int >>value)
+     inline void Map::set_grid (vector < vector < int >>value)
 {
   grid = value;
   return;
@@ -218,10 +215,10 @@ Planner & Planner::operator = (const Planner & other)
  *------------------------------------------------------------------------------
  */
 inline const int *
-Planner::get_start () const
-{
-  return start;
-}				/* -----  end of method Planner::get_start  ----- */
+     Planner::get_start () const
+     {
+       return start;
+     }				/* -----  end of method Planner::get_start  ----- */
 
 /*
  *------------------------------------------------------------------------------
@@ -229,8 +226,7 @@ Planner::get_start () const
  *      Method:  set_start
  *------------------------------------------------------------------------------
  */
-inline void
-Planner::set_start (int value[2])
+     inline void Planner::set_start (int value[2])
 {
   start[0] = value[0];
   start[1] = value[1];
@@ -245,10 +241,10 @@ Planner::set_start (int value[2])
  *------------------------------------------------------------------------------
  */
 inline const int *
-Planner::get_goal () const
-{
-  return goal;
-}				/* -----  end of method Planner::get_goal  ----- */
+     Planner::get_goal () const
+     {
+       return goal;
+     }				/* -----  end of method Planner::get_goal  ----- */
 
 /*
  *------------------------------------------------------------------------------
@@ -256,8 +252,7 @@ Planner::get_goal () const
  *      Method:  set_goal
  *------------------------------------------------------------------------------
  */
-inline void
-Planner::set_goal (int value[2])
+     inline void Planner::set_goal (int value[2])
 {
   goal[0] = value[0];
   goal[0] = value[0];
@@ -271,10 +266,10 @@ Planner::set_goal (int value[2])
  *------------------------------------------------------------------------------
  */
 inline int
-Planner::get_cost () const
-{
-  return cost;
-}				/* -----  end of method Planner::get_cost  ----- */
+     Planner::get_cost () const
+     {
+       return cost;
+     }				/* -----  end of method Planner::get_cost  ----- */
 
 /*
  *------------------------------------------------------------------------------
@@ -282,8 +277,7 @@ Planner::get_cost () const
  *      Method:  set_cost
  *------------------------------------------------------------------------------
  */
-inline void
-Planner::set_cost (int value)
+     inline void Planner::set_cost (int value)
 {
   cost = value;
   return;
@@ -296,10 +290,10 @@ Planner::set_cost (int value)
  *------------------------------------------------------------------------------
  */
 inline const string *
-Planner::get_movements_arrows () const
-{
-  return movements_arrows;
-}				/* -----  end of method Planner::get_movements_arrows  ----- */
+     Planner::get_movements_arrows () const
+     {
+       return movements_arrows;
+     }				/* -----  end of method Planner::get_movements_arrows  ----- */
 
 /*
  *------------------------------------------------------------------------------
@@ -307,8 +301,7 @@ Planner::get_movements_arrows () const
  *      Method:  set_movements_arrows
  *------------------------------------------------------------------------------
  */
-inline void
-Planner::set_movements_arrows (string value[4])
+     inline void Planner::set_movements_arrows (string value[4])
 {
   movements_arrows[0] = value[0];
   movements_arrows[1] = value[1];
@@ -324,10 +317,10 @@ Planner::set_movements_arrows (string value[4])
  *------------------------------------------------------------------------------
  */
 inline vector < vector < int >>
-Planner::get_movements () const
-{
-  return movements;
-}				/* -----  end of method Planner::get_movements  ----- */
+     Planner::get_movements () const
+     {
+       return movements;
+     }				/* -----  end of method Planner::get_movements  ----- */
 
 /*
  *------------------------------------------------------------------------------
@@ -335,8 +328,7 @@ Planner::get_movements () const
  *      Method:  set_movements
  *------------------------------------------------------------------------------
  */
-inline void
-Planner::set_movements (vector < vector < int >>value)
+     inline void Planner::set_movements (vector < vector < int >>value)
 {
   movements = value;
   return;
@@ -385,6 +377,97 @@ for (const auto v:vec)
       cout << endl;
     }
 }
+
+/* 
+ * ===  FUNCTION  ==============================================================
+ *         Name:  BFS_search_expand
+ *  Description: search a route in a map with a planner
+ * =============================================================================
+ */
+void
+BFS_search_expand (Map * map, Planner * planner)
+{
+
+  const int mapGridXsize = map->get_grid ().size ();
+  const int mapGridYsize = map->get_grid ()[0].size ();
+  const int movment_size = planner->get_movements ().size ();
+
+  vector < vector < int >>explored (map->get_mapHeight (),
+				    vector < int >(map->get_mapWidth (), 0));
+  explored[planner->get_start ()[0]][planner->get_start ()[1]] = 1;
+  vector < vector < int >>expanded (map->get_mapHeight (),
+				    vector < int >(map->get_mapWidth (), -1));
+
+  int x = planner->get_start ()[0];
+  int y = planner->get_start ()[1];
+  int g = 0;
+
+  vector < vector < int >>open;
+  open.push_back ( { g, x, y});
+
+  const int *planGoal;
+  planGoal = planner->get_goal ();
+
+  bool foundGoal = false;
+  bool resignSearch = false;
+
+  int x2, y2, seq = 0;
+
+  while (!foundGoal && !resignSearch )
+    {
+      if (open.size () == 0)
+	{
+	  resignSearch = true;
+	  cout << "No open route, giving up the search!" << endl;
+	}
+      else
+	{
+	  sort (open.begin (), open.end ());
+	  reverse (open.begin (), open.end ());
+	  vector < int >next;
+	  next = open.back ();	// the last one to the next vector
+	  open.pop_back ();	// remove the poped one to the next
+
+		  x = next[1];
+		  y = next[2];
+		  g = next[0];
+
+		  expanded[x][y] = seq++;
+
+	  if (next[1] == planGoal[0] && next[2] == planGoal[1])
+	    {
+	     foundGoal= true;
+	     cout << "[" << next[0] << ", " << next[1] << ", " << next[2] <<
+		"]" << endl;
+	    }
+	  else
+	    {
+	      for (int i = 0; i < movment_size; ++i)
+		{
+		  x2 = x + planner->get_movements ()[i][0];
+		  y2 = y + planner->get_movements ()[i][1];
+		  if (x2 >= 0 && x2 < mapGridXsize && y2 >= 0
+		      && y2 < mapGridYsize)
+		    {
+		      if (explored[x2][y2] ==
+			  0 and map->get_grid ()[x2][y2] == 0)
+			{
+			  open.push_back (
+					   {
+					   g + planner->get_cost (), x2, y2}
+			  );
+			  explored[x2][y2] = 1;
+			}
+		    }
+		}
+	    }
+
+	}
+    }
+
+  print2DVector (expanded);
+  return;
+}				/* -----  end of function search  ----- */
 
 /* 
  * ===  FUNCTION  ==============================================================
@@ -522,11 +605,12 @@ main ()
   cout << "Start: " << planner->get_string_start () << endl;
   cout << "Goal: " << planner->get_string_goal () << endl;
   cout << "Cost: " << planner->get_cost () << endl;
-  cout << "Robot Movements: " << planner->
-    get_string_movements_arrows () << endl;
+  cout << "Robot Movements: " << planner->get_string_movements_arrows () <<
+    endl;
   cout << "Delta:" << endl;
   print2DVector (planner->get_movements ());
 
-  BFS_search (map, planner);
+//  BFS_search (map, planner);
+  BFS_search_expand (map, planner);
   return 0;
 }
