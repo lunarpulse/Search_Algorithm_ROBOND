@@ -364,6 +364,21 @@ Planner::get_string_movements ()
 }				/* -----  end of method Planner::get_string_movements  ----- */
 
 template < typename T > void
+print2DVectorUnsorted (vector < vector < T > >vec)
+{
+  // Sorting the vector for grading purpose
+  //sort (vec.begin (), vec.end ());
+for (const auto v:vec)
+    {
+    for (const auto p:v)
+	{
+	  cout << p << "  ";
+	}
+      cout << endl;
+    }
+}
+
+template < typename T > void
 print2DVector (vector < vector < T > >vec)
 {
   // Sorting the vector for grading purpose
@@ -378,6 +393,115 @@ for (const auto v:vec)
     }
 }
 
+/* 
+ * ===  FUNCTION  ==============================================================
+ *         Name:  BFS_shortestPath
+ *  Description: search a route in a map with a planner
+ * =============================================================================
+ */
+void
+BFS_shortestPath(Map * map, Planner * planner)
+{
+
+  const int mapGridXsize = map->get_grid ().size ();
+  const int mapGridYsize = map->get_grid ()[0].size ();
+  const int movment_size = planner->get_movements ().size ();
+
+  vector < vector < int >>explored (map->get_mapHeight (),
+				    vector < int >(map->get_mapWidth (), 0));
+  explored[planner->get_start ()[0]][planner->get_start ()[1]] = 1;
+
+  vector < vector <int>>action(map->get_mapHeight (),
+				    vector < int >(map->get_mapWidth (), -1));
+  vector < vector < int >>expanded (map->get_mapHeight (),
+				    vector < int >(map->get_mapWidth (), -1));
+  int x = planner->get_start ()[0];
+  int y = planner->get_start ()[1];
+  int g = 0;
+
+  vector < vector < int >>open;
+  open.push_back ( { g, x, y});
+
+  const int *planGoal;
+  planGoal = planner->get_goal ();
+
+  bool foundGoal = false;
+  bool resignSearch = false;
+
+  int x2, y2, seq = 0;
+
+  while (!foundGoal && !resignSearch )
+    {
+      if (open.size () == 0)
+	{
+	  resignSearch = true;
+	  cout << "No open route, giving up the search!" << endl;
+	}
+      else
+	{
+	  sort (open.begin (), open.end ());
+	  reverse (open.begin (), open.end ());
+	  vector < int >next;
+	  next = open.back ();	// the last one to the next vector
+	  open.pop_back ();	// remove the poped one to the next
+
+	  expanded[next[1]][next[2]] = seq++;
+
+	  if (next[1] == planGoal[0] && next[2] == planGoal[1])
+	    {
+	     foundGoal= true;
+	     cout << "[" << next[0] << ", " << next[1] << ", " << next[2] <<
+		"]" << endl;
+	    }
+	  else
+	    {
+	      for (int i = 0; i < movment_size; ++i)
+		{
+		  x = next[1];
+		  y = next[2];
+		  g = next[0];
+		  x2 = x + planner->get_movements ()[i][0];
+		  y2 = y + planner->get_movements ()[i][1];
+		  if (x2 >= 0 && x2 < mapGridXsize && y2 >= 0
+		      && y2 < mapGridYsize)
+		    {
+		      if (explored[x2][y2] ==
+			  0 and map->get_grid ()[x2][y2] == 0)
+			{
+			  open.push_back (
+					   {
+					   g + planner->get_cost (), x2, y2}
+			  );
+			  explored[x2][y2] = 1;
+			  action[x2][y2] = i; 
+			}
+		    }
+		}
+	    }
+
+	}
+    }
+  
+  print2DVector (expanded);
+  print2DVector (action);
+  int pX, pY;
+  pX = planGoal[0];
+  pY = planGoal[1]; 
+  vector < vector <string>>arrows(map->get_mapHeight (),
+		  vector < string>(map->get_mapWidth (),"-"));
+  arrows[pX][pY] = "*";
+
+  while ( pX != planner->get_start()[0] || pY!= planner->get_start()[1]){
+	  x2 = pX - planner->get_movements ()[action[pX][pY]][0];
+	  y2 = pY - planner->get_movements ()[action[pX][pY]][1];
+	  arrows[x2][y2] = planner->get_movements_arrows()[action[pX][pY]] ;
+	  pX = x2;
+	  pY = y2;
+  }
+
+  print2DVectorUnsorted (arrows);
+  return;
+}				/* -----  end of function search  ----- */
 /* 
  * ===  FUNCTION  ==============================================================
  *         Name:  BFS_search_expand
@@ -428,11 +552,8 @@ BFS_search_expand (Map * map, Planner * planner)
 	  next = open.back ();	// the last one to the next vector
 	  open.pop_back ();	// remove the poped one to the next
 
-		  x = next[1];
-		  y = next[2];
-		  g = next[0];
 
-		  expanded[x][y] = seq++;
+		  expanded[next[1]][next[2]] = seq++;
 
 	  if (next[1] == planGoal[0] && next[2] == planGoal[1])
 	    {
@@ -444,6 +565,9 @@ BFS_search_expand (Map * map, Planner * planner)
 	    {
 	      for (int i = 0; i < movment_size; ++i)
 		{
+		  x = next[1];
+		  y = next[2];
+		  g = next[0];
 		  x2 = x + planner->get_movements ()[i][0];
 		  y2 = y + planner->get_movements ()[i][1];
 		  if (x2 >= 0 && x2 < mapGridXsize && y2 >= 0
@@ -611,6 +735,6 @@ main ()
   print2DVector (planner->get_movements ());
 
 //  BFS_search (map, planner);
-  BFS_search_expand (map, planner);
+  BFS_shortestPath(map, planner);
   return 0;
 }
